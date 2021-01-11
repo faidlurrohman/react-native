@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "718015790067",
+    "project_id": "cooperative-cf6b2",
+    "storage_bucket": "cooperative-cf6b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718015790067:android:566a6ba738cc4b13e0f086",
+        "android_client_info": {
+          "package_name": "com.cooperative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718015790067-uug35uq5cb6dbebrt60b0utsbke54nih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cooperative",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "718015790067-o9nsar8c92149htmf8cb8cl1f1thi06b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDj1Dab0kTvidPPbBf8JcKV79MmQdu0Yc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718015790067-o9nsar8c92149htmf8cb8cl1f1thi06b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
