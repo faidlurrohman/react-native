@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Animated,
+  StatusBar,
 } from 'react-native';
 import {color} from '../css/Colors';
 import {scale, font, WIDTH} from '../css/Style';
@@ -13,18 +14,19 @@ import OnboardSlide from '../helper/OnboardSlide';
 
 const Landing = ({navigation}) => {
   const slides = [
-    {bg: '#31A9B8', lbl: '1'},
-    {bg: '#258039', lbl: '2'},
-    {bg: '#F5BE41', lbl: '3'},
-    {bg: '#CF3721', lbl: '4'},
+    {bg: color.aqua, lbl: '1'},
+    {bg: color.avocado, lbl: '2'},
+    {bg: color.yellow, lbl: '3'},
+    {bg: color.tomato, lbl: '4'},
   ];
 
   const numItems = slides.length;
   const itemWidth = WIDTH / numItems - (numItems - 1) * scale(6);
-  const animVal = new Animated.Value(0);
+  const animVal = useRef(new Animated.Value(0)).current;
   const fadeView = useRef(new Animated.Value(0)).current;
   const [elevationAndroid, setElevationAndroid] = useState(0);
   const [elevationBar, setElevationBar] = useState(0);
+  const [backgroundProps, setBackgroundProps] = useState(color.aqua);
 
   const SlideComponents = () => {
     return slides.map((item, index) => {
@@ -78,8 +80,35 @@ const Landing = ({navigation}) => {
     });
   };
 
+  const TextComponent = () => {
+    return slides.map((item, index) => {
+      const changeColorText = animVal.interpolate({
+        inputRange: [WIDTH * (index - 1), WIDTH * (index + 1)],
+        outputRange: [WIDTH / 4 - scale(100), itemWidth],
+        extrapolate: 'clamp',
+      });
+      const onColorChange = (
+        <Animated.Text
+          key={index}
+          style={[
+            styles.textSignUp,
+            {
+              top: scale(18),
+              position: 'absolute',
+              color: item.bg,
+              opacity: changeColorText,
+            },
+          ]}>
+          SIGN UP
+        </Animated.Text>
+      );
+      return onColorChange;
+    });
+  };
+
   return (
     <View style={[styles.container]}>
+      <StatusBar translucent backgroundColor={color.transparent} />
       <View style={styles.slideContainer}>
         <ScrollView
           horizontal
@@ -90,11 +119,26 @@ const Landing = ({navigation}) => {
           bouncesZoom={false}
           pagingEnabled
           scrollEnabled
+          onMomentumScrollEnd={(e) => {
+            let contentSize = e.nativeEvent.contentSize.width / 4;
+            let x = e.nativeEvent.contentOffset.x;
+            if (x === 0) {
+              setBackgroundProps(color.aqua);
+            } else if (x > 0 && x <= contentSize) {
+              setBackgroundProps(color.avocado);
+            } else if (x > contentSize && x <= contentSize * 2) {
+              setBackgroundProps(color.yellow);
+            } else {
+              setBackgroundProps(color.tomato);
+            }
+          }}
           scrollEventThrottle={10}
           showsHorizontalScrollIndicator={false}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {x: animVal}}}],
-            {useNativeDriver: false},
+            {
+              useNativeDriver: false,
+            },
           )}>
           <SlideComponents />
         </ScrollView>
@@ -104,16 +148,24 @@ const Landing = ({navigation}) => {
           <BarComponents />
         </View>
         <TouchableOpacity
-          onPress={() => navigation.push('SignUp')}
+          onPress={() =>
+            navigation.push('SignUp', {
+              bgColor: backgroundProps,
+            })
+          }
           activeOpacity={0.8}
           style={[styles.btnSignUp, {elevation: elevationAndroid}]}>
-          <Text style={styles.textSignUp}>SIGN UP</Text>
+          <TextComponent />
         </TouchableOpacity>
         <View style={styles.belowSignUp}>
           <Text style={styles.alreadyText}>Already have an account?</Text>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => navigation.push('SignIn')}>
+            onPress={() =>
+              navigation.push('SignIn', {
+                bgColor: backgroundProps,
+              })
+            }>
             <Text style={styles.textSignIn}>SIGN IN</Text>
           </TouchableOpacity>
         </View>
@@ -130,7 +182,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btnSignUp: {
-    paddingVertical: scale(18),
+    paddingVertical: scale(30),
     alignItems: 'center',
     backgroundColor: color.white,
     borderRadius: scale(5),
@@ -139,7 +191,6 @@ const styles = StyleSheet.create({
     fontSize: scale(16),
     fontFamily: font('bold'),
     letterSpacing: 1,
-    color: color.aqua,
   },
   belowSignUp: {
     justifyContent: 'space-between',

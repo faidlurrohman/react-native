@@ -137,8 +137,9 @@ import {scale, font} from '../../css/Style';
 
 UIManager.setLayoutAnimationEnabledExperimental(true);
 
-const SignIn = ({navigation}) => {
+const SignIn = ({route, navigation}) => {
   const [signInAction, setSignInAction] = useState(false);
+  const {bgColor} = route.params;
 
   const userSignIn = () => {
     LayoutAnimation.configureNext(
@@ -158,7 +159,7 @@ const SignIn = ({navigation}) => {
       style={{
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: color.aqua,
+        backgroundColor: bgColor,
         padding: scale(18),
       }}>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -182,10 +183,10 @@ const SignIn = ({navigation}) => {
             fontSize: scale(16),
             fontFamily: font('bold'),
             letterSpacing: 1,
-            color: color.aqua,
+            color: bgColor,
           }}>
           {signInAction ? (
-            <ActivityIndicator size={scale(30)} color={color.aqua} />
+            <ActivityIndicator size={scale(30)} color={bgColor} />
           ) : (
             'SIGN IN'
           )}

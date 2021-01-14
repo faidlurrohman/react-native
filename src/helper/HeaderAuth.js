@@ -6,6 +6,7 @@ import {color} from '../css/Colors';
 
 const HeaderAuth = (props) => {
   const sceneRoute = props.scene.route.name;
+  const bgColor = props.scene.route.params.bgColor;
 
   return (
     <View
@@ -13,7 +14,7 @@ const HeaderAuth = (props) => {
         paddingHorizontal: scale(18),
         paddingVertical: scale(14),
         flexDirection: 'row',
-        backgroundColor: color.aqua,
+        backgroundColor: bgColor,
         justifyContent: 'space-between',
       }}>
       <TouchableOpacity
@@ -35,6 +36,7 @@ const HeaderAuth = (props) => {
         onPress={() =>
           props.navigation.navigate(
             sceneRoute === 'SignIn' ? 'SignUp' : 'SignIn',
+            {bgColor},
           )
         }>
         <Text
