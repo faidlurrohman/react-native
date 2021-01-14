@@ -6,7 +6,7 @@ const color = {
   grey: '#5D5D5D',
   transparent: 'rgba(0,0,0,0)',
   white: '#f7f5f0',
-  whiteOpacity: 'rgba(247, 245, 240,.7)',
+  whiteOpacity: 'rgba(247, 245, 240,.6)',
 };
 
 export {color};

@@ -11,9 +11,6 @@ import {color} from '../css/Colors';
 import {scale, font, WIDTH} from '../css/Style';
 import OnboardSlide from '../helper/OnboardSlide';
 
-const FIXED_BAR_WIDTH = 280;
-const BAR_SPACE = 10;
-
 const Landing = ({navigation}) => {
   const slides = [
     {bg: '#31A9B8', lbl: '1'},
@@ -29,7 +26,7 @@ const Landing = ({navigation}) => {
   ];
 
   const numItems = slides.length;
-  const itemWidth = FIXED_BAR_WIDTH / numItems - (numItems - 1) * BAR_SPACE;
+  const itemWidth = WIDTH / numItems - (numItems - 1) * scale(6);
   const animVal = new Animated.Value(0);
 
   const SlideComponents = () => {
@@ -53,14 +50,14 @@ const Landing = ({navigation}) => {
             {
               backgroundColor: color.whiteOpacity,
               width: itemWidth,
-              marginLeft: index === 0 ? 0 : BAR_SPACE,
+              marginLeft: index === 0 ? 0 : scale(6),
             },
           ]}>
           <Animated.View
             style={[
               styles.bar,
               {
-                backgroundColor: color.grey,
+                backgroundColor: color.white,
                 width: itemWidth,
                 transform: [{translateX: scrollBarVal}],
               },
@@ -169,15 +166,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingVertical: scale(20),
     flexDirection: 'row',
+    width: WIDTH,
+    justifyContent: 'center',
   },
   track: {
     overflow: 'hidden',
-    height: scale(5),
+    height: scale(8),
     borderRadius: scale(100),
   },
   bar: {
     borderRadius: scale(100),
-    height: scale(5),
+    height: scale(8),
     position: 'absolute',
     left: 0,
     top: 0,
