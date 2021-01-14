@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,22 +18,30 @@ const Landing = ({navigation}) => {
     {bg: '#F5BE41', lbl: '3'},
     {bg: '#CF3721', lbl: '4'},
   ];
-  const barColor = [
-    {bg: '#258039'},
-    {bg: '#F5BE41'},
-    {bg: '#CF3721'},
-    {bg: '#31A9B8'},
-  ];
 
   const numItems = slides.length;
   const itemWidth = WIDTH / numItems - (numItems - 1) * scale(6);
   const animVal = new Animated.Value(0);
+  const fadeView = useRef(new Animated.Value(0)).current;
+  const [elevationAndroid, setElevationAndroid] = useState(0);
+  const [elevationBar, setElevationBar] = useState(0);
 
   const SlideComponents = () => {
     return slides.map((item, index) => {
       return <OnboardSlide key={index} bgClr={item.bg} lbl={item.lbl} />;
     });
   };
+
+  useEffect(() => {
+    Animated.timing(fadeView, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: false,
+    }).start(() => {
+      setElevationAndroid(1);
+      setElevationBar(1);
+    });
+  }, [fadeView]);
 
   const BarComponents = () => {
     return slides.map((item, index) => {
@@ -58,6 +66,7 @@ const Landing = ({navigation}) => {
               styles.bar,
               {
                 backgroundColor: color.white,
+                elevation: elevationBar,
                 width: itemWidth,
                 transform: [{translateX: scrollBarVal}],
               },
@@ -70,7 +79,7 @@ const Landing = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={styles.slideContainer}>
         <ScrollView
           horizontal
@@ -90,18 +99,16 @@ const Landing = ({navigation}) => {
           <SlideComponents />
         </ScrollView>
       </View>
-      <View style={[styles.footer, {width: WIDTH}]}>
+      <Animated.View style={[styles.footer, {width: WIDTH, opacity: fadeView}]}>
         <View style={styles.barContainer}>
           <BarComponents />
         </View>
-        <View style={styles.btnContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.push('SignUp')}
-            activeOpacity={0.8}
-            style={styles.btnSignUp}>
-            <Text style={styles.textSignUp}>SIGN UP</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => navigation.push('SignUp')}
+          activeOpacity={0.8}
+          style={[styles.btnSignUp, {elevation: elevationAndroid}]}>
+          <Text style={styles.textSignUp}>SIGN UP</Text>
+        </TouchableOpacity>
         <View style={styles.belowSignUp}>
           <Text style={styles.alreadyText}>Already have an account?</Text>
           <TouchableOpacity
@@ -110,7 +117,7 @@ const Landing = ({navigation}) => {
             <Text style={styles.textSignIn}>SIGN IN</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </Animated.View>
     </View>
   );
 };
@@ -126,18 +133,13 @@ const styles = StyleSheet.create({
     paddingVertical: scale(18),
     alignItems: 'center',
     backgroundColor: color.white,
-    elevation: 1,
-    borderRadius: scale(5),
-  },
-  btnContainer: {
-    backgroundColor: color.white,
     borderRadius: scale(5),
   },
   textSignUp: {
     fontSize: scale(16),
     fontFamily: font('bold'),
     letterSpacing: 1,
-    color: color.grey,
+    color: color.aqua,
   },
   belowSignUp: {
     justifyContent: 'space-between',
